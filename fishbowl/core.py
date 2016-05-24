@@ -14,11 +14,10 @@ import functools
 
 import matplotlib
 
-from cycler import cycler
+from .color import palette_config, cmap_config
 
 _defaultparams = matplotlib.rcParams.copy()
 _defaultinit = matplotlib.axes.Axes.__init__
-
 
 
 def _despined(init):
@@ -89,14 +88,14 @@ def _set_style(options):
 _set_style.current_options = _defaultparams.copy()
 
 
-def set_style(axes='minimal', colors='goldfish', fonts='inconsolata', style=None):
+def set_style(axes='minimal', palette='goldfish', fonts='inconsolata', cmap='YlGnBu', style=None):
     """
     Set the global style.
 
     Kwargs:
     axes   -- The style option for axes that controls x/y-axis, ticks, grid, etc...
-    colors -- Name of the color palette
-              Accepts internal palettes and anything from colorbrewer2.org
+    palette -- color palette for 
+               Accepts 
     fonts  -- Name of the font style to use, typically just a font name
     style  -- A dictionary that contains all style options 
               If provided other keywords are ignored
@@ -107,9 +106,17 @@ def set_style(axes='minimal', colors='goldfish', fonts='inconsolata', style=None
         return
 
     style = get_style()
+
+    # Colors
+    style.update(palette_config(palette))
+    style.update(cmap_config(cmap))    
+    
+    # Axes
     style.update(_axes_style[axes])
-    style.update(_colors_style[colors])
+    
+    # Fonts
     style.update(_fonts_style[fonts])
+
     _set_style(style)
 
 
@@ -144,11 +151,6 @@ _axes_style['minimal'] = {
     'ytick.minor.size'  : 0,
     'legend.numpoints'  : 1,
     'legend.frameon'    : False,
-}
-
-_colors_style = {}
-_colors_style['goldfish'] = {
-    'axes.prop_cycle' : cycler('color',['#6fa29f', '#e77c26', '#84a169', '#a59592'])
 }
 
 _fonts_style = {}
