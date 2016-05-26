@@ -118,14 +118,14 @@ def draw_box_palette(colors, save_name=None, block=10, sep=1, background='white'
     # Assign a unique, consecutive value to each color block
     for col in xrange(cols): 
         for row in xrange(rows):
-            image[sep+side*row : sep+block+side*row, sep+side*col:sep_block+side*col] = rows*col + row + 1
+            image[sep+side*row : sep+block+side*row, sep+side*col:sep+block+side*col] = rows*col + row + 1
 
     # Show it as an image, using one color per box value in a cmap
     fig,(ax) = plt.subplots()
     ax.imshow(image, cmap=matplotlib.colors.ListedColormap([background]+list(itertools.chain(*colors))), interpolation="nearest")
     ax.set_axis_off()
     if save_name:
-        fig.savefig(save_name, dpi=300)
+        fig.savefig(save_name, dpi=300, bbox_inches='tight', pad_inches=0.0)
 
 
 def draw_sin_palette(colors, save_name=None):
