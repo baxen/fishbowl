@@ -44,7 +44,7 @@ Matplotlib is very versatile but the default settings produce mediocre graphics.
   <img src="/docs/gourami.png" height="96"><br>
   </td>
   <td>
-  <img src="/docs/lines_goldfish.png" height="384">
+  <img src="/docs/lines.gif" height="384">
   </td>
 </tr>
 </table>
