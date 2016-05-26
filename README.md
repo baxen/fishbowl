@@ -1,9 +1,33 @@
-# fishbowl
+<p align="center">
+<img src="/docs/fishbowl.svg" height="96">
+</p>
+
+<p align="center">
+<b><a href="#overview">Overview</a></b>
+|
+<b><a href="#features">Features</a></b>
+|
+<b><a href="#installation">Colors</a></b>
+</p>
+
 Style options and customization for matplotlib
 
-![Default Style](/docs/example_default.png?raw=true)
+## Overview
 
-# Colors
+Matplotlib is very versatile but the default configuration produces visualizations which are pretty difficult to follow. `fishbowl` provides an easy-to-use set of functions to configure matplotlib with a nice style that shows qualitative information without clutter.
+
+<p align="center"> 
+<img src="/docs/example_goldfish_minimal.png" height="320">
+<img src="/docs/example_gourami_minimal.png" height="320">
+</p>
+
+## Features
+- Minimal axes, grid, and line styles to help figures flow inline with text
+- A few custom color schemes and support for `palettable`
+- Optional font configurations using xelatex
+- Support for saving and loading customized styles within the module
+
+## Colors
 
 `fishbowl` provides three qualitative color-schemes to distinguish separate lines. They are intentionally short - it is almost always hard to distinguish more than four lines.
 
