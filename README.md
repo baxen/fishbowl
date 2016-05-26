@@ -1,5 +1,5 @@
 <p align="center">
-<img src="/docs/fishbowl.svg" height="96">
+<img src="/docs/fishbowl.png" height="96">
 </p>
 
 <p align="center">
