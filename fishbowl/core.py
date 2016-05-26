@@ -43,7 +43,7 @@ class _Style(dict):
     """
     def __enter__(self):
         self._original = get_style()
-        set_style(style=self)
+        set_style(**self)
         
     def __exit__(self, t, v, traceback):
         set_style(style=self._original)
@@ -141,8 +141,8 @@ _axes_style['minimal'] = {
     'axes.despined'     : True,
     'grid.color'        : '#e0e0e0',
     'grid.linestyle'    : '-',
-    'grid.linewidth'    : 0.5,
-    'lines.linewidth'   : 1.7 ,
+    'grid.linewidth'    : 1.0,
+    'lines.linewidth'   : 2.5 ,
     'xtick.direction'   : 'out',
     'xtick.major.size'  : 6, # Only xticks
     'xtick.major.width' : 1,
@@ -157,6 +157,7 @@ _fonts_style = {}
 _fonts_style['inconsolata'] = {
     'backend'       : 'pgf',
     'font.family'   : 'serif', # Controlled through mathspec below
+    'font.size'     : '20',    # Controlled through mathspec below
     'text.usetex'   : True,
     'pgf.texsystem' : 'xelatex',
     'pgf.rcfonts'   : False,   # don't setup fonts from rc parameters 
