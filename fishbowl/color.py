@@ -120,12 +120,16 @@ def draw_box_palette(colors, save_name=None, block=10, sep=1, background='white'
         for row in xrange(rows):
             image[sep+side*row : sep+block+side*row, sep+side*col:sep+block+side*col] = rows*col + row + 1
 
-    # Show it as an image, using one color per box value in a cmap
-    fig,(ax) = plt.subplots()
-    ax.imshow(image, cmap=matplotlib.colors.ListedColormap([background]+list(itertools.chain(*colors))), interpolation="nearest")
+    # Figure without border or axis, sized to just contain the blocks
+    fig = plt.figure(frameon=False, figsize=(cols,rows))
+    ax = plt.Axes(fig, [0.,0.,1.,1.])
     ax.set_axis_off()
+    fig.add_axes(ax)
+
+    # Show it as an image, using one color per box value in a cmap
+    ax.imshow(image, cmap=matplotlib.colors.ListedColormap([background]+list(itertools.chain(*colors))), interpolation="nearest")
     if save_name:
-        fig.savefig(save_name, dpi=300, bbox_inches='tight', pad_inches=0.0)
+        fig.savefig(save_name, dpi=120)
 
 
 def draw_sin_palette(colors, save_name=None):
