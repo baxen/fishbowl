@@ -11,43 +11,40 @@ get_style   - Return the current style options dictionary
 """
 
 import functools
-
 import matplotlib
+
+from contextlib import contextmanager
 
 from .color import palette_config, cmap_config
 
 _defaultparams = matplotlib.rcParams.copy()
 _defaultinit = matplotlib.axes.Axes.__init__
+    
 
+# ------------------------------------------------------------
+# Style Configuration
+# ------------------------------------------------------------
 
-def _despined(init):
+def _set_style(options):
     """
-    Decorator to make the constructor of pyplot.Axes
-    return an axes with despined up spines, grid, and ticks.
+    Internal implementation of style setting.
     """
-    @functools.wraps(init)
-    def despined_init(self, *args, **kwargs):
-        init(self, *args, **kwargs)
-        for spine in ["left", "right", "top"]:
-            self.spines[spine].set_visible(False)
-        self.xaxis.tick_bottom()
-        self.yaxis.tick_right()
-        for tick in self.xaxis.get_major_ticks():
-            tick.gridline.set_visible(False)
-    return despined_init
+    _set_style.current_options = options
 
+    # This is a monkey patch to handle some axes styles that
+    # cannot be configured in the rc parameters
+    # It should be safe in the majority of cases because
+    # the decorators only register additional function calls
+    # and do not replace the original function
+    if options.pop('axes.initialize', None) == 'despined':
+        matplotlib.axes.Axes.__init__ = _despined(_defaultinit)
+    else:
+        matplotlib.axes.Axes.__init__ = _defaultinit
+    
+    # Remaining options are rcParams
+    matplotlib.rcParams.update(options)
 
-class _Style(dict):
-    """
-    Internal class to handle temporary styling.
-    """
-    def __enter__(self):
-        self._original = get_style()
-        set_style(**self)
-        
-    def __exit__(self, t, v, traceback):
-        set_style(style=self._original)
-
+_set_style.current_options = _defaultparams.copy()
 
 def reset_style():
     """
@@ -66,39 +63,20 @@ def get_style():
     """
     return _set_style.current_options.copy()
 
-    
-def _set_style(options):
-    """
-    Internal implementation of style setting.
-    """
-    _set_style.current_options = options
 
-    # This is a trick to handle some axes styles that
-    # cannot be configured in the rc parameters
-    # The init function for axes is modified to make necessary edits
-    # on construction
-    if options.pop('axes.despined', None):
-        matplotlib.axes.Axes.__init__ = _despined(_defaultinit)
-    else:
-        matplotlib.axes.Axes.__init__ = _defaultinit
-    
-    # Remaining options are rcParams
-    matplotlib.rcParams.update(options)
-
-_set_style.current_options = _defaultparams.copy()
-
-
-def set_style(axes='minimal', palette='goldfish', fonts='inconsolata', cmap='YlGnBu', style=None):
+def set_style(axes='minimal', palette='goldfish', cmap='YlGnBu', fonts='inconsolata', style=None):
     """
     Set the global style.
 
     Kwargs:
-    axes   -- The style option for axes that controls x/y-axis, ticks, grid, etc...
-    palette -- color palette for 
-               Accepts 
-    fonts  -- Name of the font style to use, typically just a font name
-    style  -- A dictionary that contains all style options 
-              If provided other keywords are ignored
+    axes    -- The style option for axes that controls x/y-axis, ticks, grid, etc...
+    palette -- color palette for consecutive objects
+               Accepts names of default or saved palettes or palettable.palette instances
+    cmap    -- Name of the cmap to use for 2D plots.
+               Accepts names of matplotlib cmaps or palettable.palette instances
+    fonts   -- Name of the font style to use, typically just a font name
+    style   -- A dictionary that contains all style options 
+               If provided other keywords are ignored
     """
 
     if style:
@@ -120,17 +98,40 @@ def set_style(axes='minimal', palette='goldfish', fonts='inconsolata', cmap='YlG
     _set_style(style)
 
 
+@contextmanager
 def style(**kwargs):
     """
-    Return a style object to use temporarily in a ``with`` statement.
+    Context manager for using style settings temporarily.
 
-    See documentation for set_style for kwargs.
+    See set_style for keyword arguments and options.
     """
-    return _Style(kwargs)
+    
+    initial_style = get_style()
+    set_style(**kwargs)
+    yield
+    set_style(style=initial_style)
 
 
 # TODO
 # Move these into separate modules and/or json files
+
+
+
+def _despined(init):
+    """
+    Decorator to make the constructor of pyplot.Axes
+    return an axes with despined up spines, grid, and ticks.
+    """
+    @functools.wraps(init)
+    def despined_init(self, *args, **kwargs):
+        init(self, *args, **kwargs)
+        for spine in ["left", "right", "top"]:
+            self.spines[spine].set_visible(False)
+        self.xaxis.tick_bottom()
+        self.yaxis.tick_right()
+        for tick in self.xaxis.get_major_ticks():
+            tick.gridline.set_visible(False)
+    return despined_init
 
 _axes_style = {}
 _axes_style['minimal'] = {
@@ -138,7 +139,7 @@ _axes_style['minimal'] = {
     'axes.grid'         : True,
     'axes.facecolor'    : 'white',
     'axes.axisbelow'    : True,  # Precendence for data
-    'axes.despined'     : True,
+    'axes.initialize'   : 'despined',
     'grid.color'        : '#e0e0e0',
     'grid.linestyle'    : '-',
     'grid.linewidth'    : 1.0,
