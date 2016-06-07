@@ -10,12 +10,13 @@ reset_style - Globally reset style to matplotlib defaults
 get_style   - Return the current style options dictionary
 """
 
-import functools
 import matplotlib
+import color
 
 from contextlib import contextmanager
+from functools import wraps
+from cycler import cycler
 
-from .color import palette_config, cmap_config
 
 _defaultparams = matplotlib.rcParams.copy()
 _defaultinit = matplotlib.axes.Axes.__init__
@@ -36,10 +37,15 @@ def _set_style(options):
     # It should be safe in the majority of cases because
     # the decorators only register additional function calls
     # and do not replace the original function
-    if options.pop('axes.initialize', None) == 'despined':
+    initialize = options.pop('axes.initialize', None)
+    if initialize == 'despined':
         matplotlib.axes.Axes.__init__ = _despined(_defaultinit)
     else:
         matplotlib.axes.Axes.__init__ = _defaultinit
+
+    palette = options.pop('color.palette', None)
+    if palette:
+        options['axes.prop_cycle'] = cycler('color', palette)
     
     # Remaining options are rcParams
     matplotlib.rcParams.update(options)
@@ -86,8 +92,8 @@ def set_style(axes='minimal', palette='goldfish', cmap='YlGnBu', fonts='inconsol
     style = get_style()
 
     # Colors
-    style.update(palette_config(palette))
-    style.update(cmap_config(cmap))    
+    style.update(color.palette(palette))
+    style.update(color.cmap(cmap))    
     
     # Axes
     style.update(_axes_style[axes])
@@ -116,13 +122,12 @@ def style(**kwargs):
 # Move these into separate modules and/or json files
 
 
-
 def _despined(init):
     """
     Decorator to make the constructor of pyplot.Axes
     return an axes with despined up spines, grid, and ticks.
     """
-    @functools.wraps(init)
+    @wraps(init)
     def despined_init(self, *args, **kwargs):
         init(self, *args, **kwargs)
         for spine in ["left", "right", "top"]:

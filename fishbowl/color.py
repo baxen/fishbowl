@@ -18,78 +18,49 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from cycler import cycler
+from .base import loads_from_json, saves_to_json
 
-_json = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__),'config','fishbowl.color.json'))
 
-# Loading and saving colors
-
-def palette_config(palette):
+def cmap(arg):
     """
-    Return the rcparams needed to set the default cycle to palette
-    
-    palette can be any name known by fishbowl or previously saved, or a 
-    palettable.palette instance.
-    """
-    return {'axes.prop_cycle':cycler('color',hex_palette(palette))}
+    Return configuration for cmap specified by arg
 
-
-def cmap_config(palette):
+    Arg can be any cmap known by matplotlib or a palettable.palette instance.
     """
-    Return the rcparams needed to set the default cmap to palette
-    
-    palette can be any cmap known by matplotlib or a palettable.palette
-    instance.
-    """
-    name, cmap = cmap_palette(palette)
-    matplotlib.cm.register_cmap(name, cmap)
-    return {'image.cmap':name}
-    
-
-
-def cmap_palette(palette):
-    """
-    Return the cmap name and cmap instance for palette.
-
-    palette can be any matplotlib cmap name or a palettable.palette instance.
-    """
-    if hasattr(palette,'hex_colors'):
-        return palette.name, palette.mpl_colormap
+    if hasattr(arg, 'mpl_colormap'):
+       matplotlib.cm.register_cmap(arg.name, arg.mpl_colormap)
+       return {'image.cmap':arg.name}
+    elif type(arg) == str:
+        return {'image.cmap':arg}
     else:
-        return palette, matplotlib.cm.get_cmap(palette)
+        raise ValueError('Could not interpret the argument provided for cmap: ' + str(arg))
+ 
 
 
-def hex_palette(palette):
+@loads_from_json('fishbowl.palettes.json')
+def palette(arg):
     """
-    Return a list of hex colors that forms the palette.
+    Return configuration for palette specified by arg
     
-    Name can be any name known by fishbowl or previously saved, or a 
+    Arg can be any name known by fishbowl or previously saved, or a 
     palettable.palette instance.
     """
-    if hasattr(palette,'hex_colors'):
-        return palette.hex_colors
-
-    with open(_json,'r') as infile:
-        return json.load(infile)[palette]
+    if hasattr(arg,'hex_colors'):
+        return {'color.palette':arg.hex_colors}
 
 
-def save_palette(name, palette):
+@saves_to_json('fishbowl.palettes.json')
+def save_palette(name, config):
     """
-    Save a new color palette to configuration json.
+    Save a new color palette as name.
 
-    palette can be a list of hex colors or a palettable.palette instance
+    config can be a list of hex colors, a palettable.palette instance, or a previously known palette.
     """
-    if hasattr(palette,'hex_colors'):
-        palette = palette.hex_colors
-        
-    with open(_json,'r') as infile:
-        palettes = json.load(infile)
+    return palette(config)
 
-    palettes[name] = palette
-    with open(_json,'w') as outfile:
-        json.dump(palettes, outfile)
-
-
+# ------------------------------------------------------------
 # Utility functions for visualizing colors
+# ------------------------------------------------------------
 
 def draw_box_palette(colors, save_name=None, block=10, sep=1, background='white'):
     """
