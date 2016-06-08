@@ -54,7 +54,8 @@ def save_palette(name, config):
     """
     Save a new color palette as name.
 
-    config can be a list of hex colors, a palettable.palette instance, or a previously known palette.
+    config can be a list of hex colors, a palettable.palette instance, or a 
+    previously known palette.
     """
     return palette(config)
 

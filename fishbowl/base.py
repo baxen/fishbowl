@@ -17,10 +17,11 @@ def _config_path(path):
 
 def loads_from_json(path):
     """
-    Decorator to create functions which first attempt to return values saved from json file at path.
+    Decorator to make function first return values saved at json path.
     
-    Assumes the first argument is the dictionary key if intended to load from file.
-    The function is assumed to handle all cases where the key is not found in json.
+    Assumes the first argument is the dictionary key if intended to load from 
+    file. The function is assumed to handle all cases where the key is not 
+    found in json.
     """
     def loads_from_json_dec(func):
         # Assign a json path to the function for reading
@@ -32,7 +33,10 @@ def loads_from_json(path):
                     saved_values = json.load(infile)
                 if args[0] in saved_values:
                     return saved_values[args[0]]
-            return func(*args, **kwargs)
+            val = func(*args, **kwargs)
+            if val: 
+                return val
+            raise ValueError('Could not interpret argument "' + str(args[0]) + '" and no saved value found.')
         return json_load_func
     return loads_from_json_dec
     

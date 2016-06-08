@@ -5,6 +5,8 @@ from .base import loads_from_json, saves_to_json
 def axes(name):
     """
     Return configuration for named axes
+
+    name must be a saved (or default) configuration
     """
     # Only handled through the save/load system
     pass
@@ -25,7 +27,7 @@ def save_axes(name, config):
 def _despined(init):
     """
     Decorator to make the constructor of pyplot.Axes
-    return an axes with despined up spines, grid, and ticks.
+    return an axes without left right or top spines.
     """
     @wraps(init)
     def despined_init(self, *args, **kwargs):
