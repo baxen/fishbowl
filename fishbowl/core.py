@@ -11,10 +11,11 @@ get_style   - Return the current style options dictionary
 """
 
 import matplotlib
-import color
+import color 
+import font as ft # Avoid name collisions with common arguments
+import axes as ax
 
 from contextlib import contextmanager
-from functools import wraps
 from cycler import cycler
 
 
@@ -38,8 +39,8 @@ def _set_style(options):
     # the decorators only register additional function calls
     # and do not replace the original function
     initialize = options.pop('axes.initialize', None)
-    if initialize == 'despined':
-        matplotlib.axes.Axes.__init__ = _despined(_defaultinit)
+    if initialize in ax._initialize_decorators:
+        matplotlib.axes.Axes.__init__ = ax._initialize_decorators[initialize](_defaultinit)
     else:
         matplotlib.axes.Axes.__init__ = _defaultinit
 
@@ -70,7 +71,7 @@ def get_style():
     return _set_style.current_options.copy()
 
 
-def set_style(axes='minimal', palette='goldfish', cmap='YlGnBu', fonts='inconsolata', style=None):
+def set_style(axes='minimal', palette='goldfish', cmap='YlGnBu', font='Inconsolata', style=None):
     """
     Set the global style.
 
@@ -96,10 +97,10 @@ def set_style(axes='minimal', palette='goldfish', cmap='YlGnBu', fonts='inconsol
     style.update(color.cmap(cmap))    
     
     # Axes
-    style.update(_axes_style[axes])
+    style.update(ax.axes(axes))
     
     # Fonts
-    style.update(_fonts_style[fonts])
+    style.update(ft.font(font))
 
     _set_style(style)
 
@@ -117,55 +118,3 @@ def style(**kwargs):
     yield
     set_style(style=initial_style)
 
-
-# TODO
-# Move these into separate modules and/or json files
-
-
-def _despined(init):
-    """
-    Decorator to make the constructor of pyplot.Axes
-    return an axes with despined up spines, grid, and ticks.
-    """
-    @wraps(init)
-    def despined_init(self, *args, **kwargs):
-        init(self, *args, **kwargs)
-        for spine in ["left", "right", "top"]:
-            self.spines[spine].set_visible(False)
-        self.xaxis.tick_bottom()
-        self.yaxis.tick_right()
-        for tick in self.xaxis.get_major_ticks():
-            tick.gridline.set_visible(False)
-    return despined_init
-
-_axes_style = {}
-_axes_style['minimal'] = {
-    'axes.edgecolor'    : 'black', # For a pronounced x-axis relative to grid lines
-    'axes.grid'         : True,
-    'axes.facecolor'    : 'white',
-    'axes.axisbelow'    : True,  # Precendence for data
-    'axes.initialize'   : 'despined',
-    'grid.color'        : '#e0e0e0',
-    'grid.linestyle'    : '-',
-    'grid.linewidth'    : 1.0,
-    'lines.linewidth'   : 2.5 ,
-    'xtick.direction'   : 'out',
-    'xtick.major.size'  : 6, # Only xticks
-    'xtick.major.width' : 1,
-    'xtick.minor.size'  : 0,
-    'ytick.major.size'  : 0,
-    'ytick.minor.size'  : 0,
-    'legend.numpoints'  : 1,
-    'legend.frameon'    : False,
-}
-
-_fonts_style = {}
-_fonts_style['inconsolata'] = {
-    'backend'       : 'pgf',
-    'font.family'   : 'serif', # Controlled through mathspec below
-    'font.size'     : '20',    # Controlled through mathspec below
-    'text.usetex'   : True,
-    'pgf.texsystem' : 'xelatex',
-    'pgf.rcfonts'   : False,   # don't setup fonts from rc parameters 
-    'pgf.preamble'  : [r"\usepackage{mathspec}", r"\setallmainfonts(Digits,Latin,Greek){Inconsolata}"]
-}

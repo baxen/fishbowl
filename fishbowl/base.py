@@ -52,11 +52,14 @@ def saves_to_json(path):
         def json_save_func(*args, **kwargs):
             value = func(*args, **kwargs)
     
-            with open(func._json, 'r') as infile:
-                saved_values = json.load(infile)
+            if os.path.exists(func._json):
+                with open(func._json, 'r') as infile:
+                    saved_values = json.load(infile)
+            else:
+                saved_values = {}
             saved_values[args[0]] = value
     
-            with open(_json, 'w') as outfile:
+            with open(func._json, 'w') as outfile:
                 json.dump(saved_values, outfile)
             return value
         return json_save_func
