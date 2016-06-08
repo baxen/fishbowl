@@ -17,8 +17,8 @@ def font(name):
     """
     Return configuration for named font
     
-    If a saved font config is not found, assumes the named font is a system font 
-    and attempts to use it through pgf and xelatex.
+    If a saved font config is not found, assumes the named font is a system 
+    font and attempts to use it through pgf and xelatex.
     """
     return _pgf_params(name)
 

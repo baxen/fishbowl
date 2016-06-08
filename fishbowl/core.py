@@ -77,11 +77,13 @@ def set_style(axes='minimal', palette='goldfish', cmap='YlGnBu', font='Inconsola
 
     Kwargs:
     axes    -- The style option for axes that controls x/y-axis, ticks, grid, etc...
+               Accepts names of saved axes styles
     palette -- color palette for consecutive objects
                Accepts names of default or saved palettes or palettable.palette instances
     cmap    -- Name of the cmap to use for 2D plots.
                Accepts names of matplotlib cmaps or palettable.palette instances
     fonts   -- Name of the font style to use, typically just a font name
+               Accepts names of saved font configurations or names of system fonts.
     style   -- A dictionary that contains all style options 
                If provided other keywords are ignored
     """

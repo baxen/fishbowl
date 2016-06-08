@@ -7,18 +7,22 @@
 |
 <b><a href="#features">Features</a></b>
 |
-<b><a href="#installation">Colors</a></b>
+<b><a href="#axes">Axes</a></b>
+|
+<b><a href="#fonts">Fonts</a></b>
+|
+<b><a href="#colors">Colors</a></b>
 </p>
 
 Style options and customization for matplotlib
 
 ## Overview
 
-Matplotlib is very versatile but the default settings produce mediocre graphics. `fishbowl` provides an easy-to-use set of functions to configure matplotlib with an uncluttered style.
+Matplotlib is very versatile but the default settings produce mediocre graphics. `fishbowl` provides an easy-to-use set of functions to configure matplotlib with an uncluttered style and nice fonts.
 
 <p align="center"> 
-<img src="/docs/example_goldfish_minimal.png" height="320">
-<img src="/docs/example_gourami_minimal.png" height="320">
+<img src="/docs/example_goldfish_minimal_inconsolata.png" height="320">
+<img src="/docs/example_gourami_minimal_latolight.png" height="320">
 </p>
 
 ## Features
@@ -26,6 +30,59 @@ Matplotlib is very versatile but the default settings produce mediocre graphics.
 - A few custom color schemes and support for `palettable`
 - Optional font configurations using xelatex
 - Support for saving and loading customized styles within the module
+
+## Axes
+
+In `fishbowl`, axes refers to the layout of all of the features of the plot besides the data: the x- and y- axis, grid lines, line widths, ticks and labels. 
+
+The default axes style, `minimal` removes plot junk but leaves enough labels to be quite precise. You can modify this to suit your needs:
+
+```python
+import fishbowl
+config = fishbowl.axes.axes('minimal')
+config['grid.linestyle'] = '--'
+
+fishbowl.axes.save_axes('minimal_dashed')
+```
+
+```python
+import fishbowl
+
+fishbowl.set_style(axes='minimal_dashed')
+```
+
+`fishbowl.axes` introduces a new parameter to configure matplotlib: `axes.initialize`. This parameter registers additional calls to all axes initialized by matplotlib to handle actions like removing the spines for the y-axis. To return to default behavior, you can set it to `None`.
+
+## Fonts
+
+Matplotlib has powerful options for fonts through the combination of the `pgf` backend and `xelatex`. If you have a working xelatex installation, you can use arbitrary system fonts for your graphics. `fishbowl` makes this easy, just pass the name of a system font to `set_style`. The name should match the name used by `fc-list`, check for the currently installed options like this:
+
+```bash
+fc-list :outline -f "%{family}\n" | sort | uniq
+```
+
+and then set it (globally or locally)
+
+```python
+set_style(font='Lato Light')
+```
+
+You can use `fishbowl.font` to check how these fonts are configured, and then modify and save for future use if desired.
+
+```python
+import fishbowl
+config = fishbowl.font.font('Lato Light')
+config['font.size'] = 30 
+
+fishbowl.font.save_font('Lato30')
+```
+
+```python
+import fishbowl
+
+fishbowl.set_style(font='Lato30')
+```
+
 
 ## Colors
 
@@ -52,7 +109,7 @@ Matplotlib is very versatile but the default settings produce mediocre graphics.
 `fishbowl.color` provides simple methods to make plots like this so you can test your own colors
 
 ```python
-import fishbowl.color
+import fishbowl
 
 fishbowl.color.draw_box_palette(['skyblue','goldenrod','plum'])
 fishbowl.color.draw_sin_palette(['#CDB380','#036564','#033649'])
