@@ -36,7 +36,7 @@ def loads_from_json(path):
             val = func(*args, **kwargs)
             if val: 
                 return val
-            raise ValueError('Could not find a saved value or interpret argument: ' + str(args[0]))
+            raise ValueError('Could not interpret argument "' + str(args[0]) + '" and no saved value found.')
         return json_load_func
     return loads_from_json_dec
     
