@@ -23,4 +23,4 @@ Migrate examples stored in core to individual modules for color, axes, fonts
 Create support for customizations and storing them! jsons?
 """
 
-from core import style, set_style, get_style, reset_style
+from .core import style, set_style, get_style, reset_style
