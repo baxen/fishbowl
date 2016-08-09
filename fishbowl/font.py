@@ -1,4 +1,4 @@
-from .base import loads_from_json, saves_to_json
+from fishbowl.base import loads_from_json, saves_to_json
 
 
 def _pgf_params(name):

@@ -1,5 +1,5 @@
 from functools import wraps
-from .base import loads_from_json, saves_to_json
+from fishbowl.base import loads_from_json, saves_to_json
 
 
 @loads_from_json('fishbowl.axes.json')

@@ -11,9 +11,9 @@ get_style   - Return the current style options dictionary
 """
 
 import matplotlib
-from . import color
-from . import font as ft  # Avoid name collisions with common arguments
-from . import axes as ax
+from fishbowl import color
+from fishbowl import font as ft  # Avoid name collisions with common arguments
+from fishbowl import axes as ax
 
 from contextlib import contextmanager
 from cycler import cycler

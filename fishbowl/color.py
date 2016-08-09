@@ -16,7 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from cycler import cycler
-from .base import loads_from_json, saves_to_json
+from fishbowl.base import loads_from_json, saves_to_json
 
 
 def cmap(arg):
