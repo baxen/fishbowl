@@ -1,6 +1,7 @@
 from functools import wraps
 from .base import loads_from_json, saves_to_json
 
+
 @loads_from_json('fishbowl.axes.json')
 def axes(name):
     """
@@ -9,7 +10,6 @@ def axes(name):
     name must be a saved (or default) configuration
     """
     # Only handled through the save/load system
-    pass
 
 
 @saves_to_json('fishbowl.axes.json')
@@ -41,4 +41,4 @@ def _despined(init):
     return despined_init
 
 
-_initialize_decorators = {'despined':_despined}
+_initialize_decorators = {'despined': _despined}

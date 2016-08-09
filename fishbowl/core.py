@@ -11,8 +11,8 @@ get_style   - Return the current style options dictionary
 """
 
 import matplotlib
-from  . import color 
-from . import font as ft # Avoid name collisions with common arguments
+from . import color
+from . import font as ft  # Avoid name collisions with common arguments
 from . import axes as ax
 
 from contextlib import contextmanager
@@ -21,7 +21,7 @@ from cycler import cycler
 
 _defaultparams = matplotlib.rcParams.copy()
 _defaultinit = matplotlib.axes.Axes.__init__
-    
+
 
 # ------------------------------------------------------------
 # Style Configuration
@@ -47,11 +47,12 @@ def _set_style(options):
     palette = options.pop('color.palette', None)
     if palette:
         options['axes.prop_cycle'] = cycler('color', palette)
-    
+
     # Remaining options are rcParams
     matplotlib.rcParams.update(options)
 
 _set_style.current_options = _defaultparams.copy()
+
 
 def reset_style():
     """
@@ -84,7 +85,7 @@ def set_style(axes='minimal', palette='goldfish', cmap='YlGnBu', font='Inconsola
                Accepts names of matplotlib cmaps or palettable.palette instances
     fonts   -- Name of the font style to use, typically just a font name
                Accepts names of saved font configurations or names of system fonts.
-    style   -- A dictionary that contains all style options 
+    style   -- A dictionary that contains all style options
                If provided other keywords are ignored
     """
 
@@ -96,11 +97,11 @@ def set_style(axes='minimal', palette='goldfish', cmap='YlGnBu', font='Inconsola
 
     # Colors
     style.update(color.palette(palette))
-    style.update(color.cmap(cmap))    
-    
+    style.update(color.cmap(cmap))
+
     # Axes
     style.update(ax.axes(axes))
-    
+
     # Fonts
     style.update(ft.font(font))
 
@@ -114,9 +115,8 @@ def style(**kwargs):
 
     See set_style for keyword arguments and options.
     """
-    
+
     initial_style = get_style()
     set_style(**kwargs)
     yield
     set_style(style=initial_style)
-
