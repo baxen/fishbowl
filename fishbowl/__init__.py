@@ -18,9 +18,7 @@ Modules:
 
 core -- Style setup and control tools
 
-TODO
-Migrate examples stored in core to individual modules for color, axes, fonts
-Create support for customizations and storing them! jsons?
 """
 
-from fishbowl.core import style, set_style, get_style, reset_style
+from fishbowl.core import (style, set_style,  # noqa: F401
+                           get_style, reset_style)

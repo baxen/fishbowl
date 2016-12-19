@@ -1,5 +1,5 @@
 """
-Base - Utilities for saving/loading configurations.
+base - Utilities for saving/loading configurations.
 """
 
 import os
@@ -9,15 +9,17 @@ from functools import wraps
 
 
 def _config_path(path):
+    """ Absolute path to file in configuration directory for module.
+
     """
-    Returns absolute path to file in configuration directory for module.
-    """
-    return os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__), 'config', path))
+    return os.path.realpath(os.path.join(os.getcwd(),
+                                         os.path.dirname(__file__),
+                                         'config',
+                                         path))
 
 
 def loads_from_json(path):
-    """
-    Decorator to make function first return values saved at json path.
+    """ Decorator to make function first return values saved at json path.
 
     Assumes the first argument is the dictionary key if intended to load from
     file. The function is assumed to handle all cases where the key is not
@@ -37,14 +39,15 @@ def loads_from_json(path):
             val = func(*args, **kwargs)
             if val:
                 return val
-            raise ValueError('Could not interpret argument "' + str(args[0]) + '" and no saved value found.')
+            raise ValueError('Could not interpret argument "'
+                             + str(args[0])
+                             + '" and no saved value found.')
         return json_load_func
     return loads_from_json_dec
 
 
 def saves_to_json(path):
-    """
-    Decorator to create functions which save their outputs to json file.
+    """ Decorator to create functions which save their outputs to json file.
 
     Assumes first argument is the dictionary key to save to the file, and
     returns the saved value.

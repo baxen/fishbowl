@@ -12,7 +12,7 @@ get_style   - Return the current style options dictionary
 
 import matplotlib
 from fishbowl import color
-from fishbowl import font as ft  # Avoid name collisions with common arguments
+from fishbowl import font as ft
 from fishbowl import axes as ax
 
 from contextlib import contextmanager
@@ -28,8 +28,8 @@ _defaultinit = matplotlib.axes.Axes.__init__
 # ------------------------------------------------------------
 
 def _set_style(options):
-    """
-    Internal implementation of style setting.
+    """ Internal implementation of style setting.
+
     """
     _set_style.current_options = options
 
@@ -51,42 +51,50 @@ def _set_style(options):
     # Remaining options are rcParams
     matplotlib.rcParams.update(options)
 
+
 _set_style.current_options = _defaultparams.copy()
 
 
 def reset_style():
-    """
-    Return the style to matplotlib defaults.
+    """ Return the style to matplotlib defaults.
+
     """
     soptions = _defaultparams.copy()
     set_style(style=soptions)
 
 
 def get_style():
-    """
-    Return a complete style dictionary matching the current style.
+    """ Return a complete style dictionary matching the current style.
 
     This dictionary is mostly the rc parameters from matplotlib, with
     a few additional options handled by set_style.
+
     """
     return _set_style.current_options.copy()
 
 
-def set_style(axes='minimal', palette='goldfish', cmap='YlGnBu', font='Inconsolata', style=None):
-    """
-    Set the global style.
+def set_style(axes='minimal', palette='goldfish',
+              cmap='YlGnBu', font='Inconsolata', style=None):
+    """ Set the global style.
 
-    Kwargs:
-    axes    -- The style option for axes that controls x/y-axis, ticks, grid, etc...
-               Accepts names of saved axes styles
-    palette -- color palette for consecutive objects
-               Accepts names of default or saved palettes or palettable.palette instances
-    cmap    -- Name of the cmap to use for 2D plots.
-               Accepts names of matplotlib cmaps or palettable.palette instances
-    fonts   -- Name of the font style to use, typically just a font name
-               Accepts names of saved font configurations or names of system fonts.
-    style   -- A dictionary that contains all style options
-               If provided other keywords are ignored
+    Parameters
+    ----------
+    axes
+        The style option for axes that controls x/y-axis, ticks, grid, etc...
+        Accepts names of saved axes styles
+    palette
+        color palette for consecutive objects
+        Accepts names of saved palettes or palettable.palette instances
+    cmap
+        Name of the cmap to use for 2D plots.
+        Accepts names of matplotlib cmaps or palettable.palette instances
+    fonts
+         Name of the font style to use, typically just a font name
+         Accepts names of saved font configurations or names of system fonts.
+    style
+         A dictionary that contains all style options
+         If provided other keywords are ignored
+
     """
 
     if style:
@@ -110,12 +118,13 @@ def set_style(axes='minimal', palette='goldfish', cmap='YlGnBu', font='Inconsola
 
 @contextmanager
 def style(**kwargs):
-    """
-    Context manager for using style settings temporarily.
+    """ Context manager for using style settings temporarily.
 
-    See set_style for keyword arguments and options.
-    """
+    See Also
+    --------
+    set_style: called with kwargs within the context
 
+    """
     initial_style = get_style()
     set_style(**kwargs)
     yield
