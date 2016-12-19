@@ -1,0 +1,6 @@
+-   repo: git://github.com/pre-commit/pre-commit-hooks
+    sha: v0.4.2
+    hooks:
+    -   id: flake8
+    -   id: requirements-txt-fixer
+    -   id: trailing-whitespace
