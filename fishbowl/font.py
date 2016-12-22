@@ -10,10 +10,8 @@ def _pgf_params(name):
     """
     preamble = [r"\usepackage{mathspec}",
                 r"\setallmainfonts(Digits,Latin,Greek){{{}}}".format(name)]
-    return {'backend': 'pgf',
-            'font.family': 'serif',  # Controlled through mathspec below
+    return {'font.family': 'serif',  # Controlled through mathspec below
             'font.size': '20',    # Controlled through mathspec below
-            'text.usetex': True,
             'pgf.texsystem': 'xelatex',
             'pgf.rcfonts': False,   # don't setup fonts from rc parameters
             'pgf.preamble': preamble

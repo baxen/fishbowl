@@ -5,9 +5,12 @@ python:
   - "3.4"
   - "3.5"
 # command to install dependencies
-install: 
+install:
   - pip install -r requirements.txt
   - pip install -e .
+# configure MPL backend for non-display
+before_script:
+  - export MPLBACKEND="agg"
 # command to run tests
-script: 
+script:
   - py.test
