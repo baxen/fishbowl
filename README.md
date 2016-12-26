@@ -7,6 +7,8 @@
 |
 <b><a href="#features">Features</a></b>
 |
+<b><a href="#cli">CLI</a></b>
+|
 <b><a href="#axes">Axes</a></b>
 |
 <b><a href="#fonts">Fonts</a></b>
@@ -20,22 +22,51 @@ Style options and customization for matplotlib
 
 Matplotlib is very versatile but the default settings produce mediocre graphics. `fishbowl` provides an easy-to-use set of functions to configure matplotlib with an uncluttered style and nice fonts.
 
-<p align="center"> 
+<p align="center">
 <img src="/docs/example_goldfish_minimal_inconsolata.png" height="320">
 <img src="/docs/example_gourami_minimal_latolight.png" height="320">
 </p>
 
 ## Features
+- A decorator to enable easy plot customization from the command line
 - Minimal axes and lines to help figures flow with text
 - A few custom color schemes and support for `palettable`
 - Optional font configurations using xelatex
 - Support for saving and loading customized styles within the module
 
+## CLI
+`fishbowl` defines a decorator that sets up a function with a standard CLI. The function should accept a `fig, ax` argument, draw the actual plot content on the axis, and return the output filename. The command line interface will then handle common options. For example, create a `test.py`:
+
+```python
+import fishbowl
+import numpy as np
+
+fishbowl.set_style()
+
+
+@fishbowl.plot
+def example(fig, ax, **kwargs):
+    x = np.linspace(0, 30, 100)
+    r = np.random.rand(100) * 1 + .5 * x + 10
+    ax.plot(x, r)
+    return 'test.png'
+
+if __name__ == "__main__":
+    example()
+```
+
+Then `test.py` can handle a variety of setup arguments, such as labels, ticks, and ranges. For example
+```
+python test.py --xmin 0.0 --ymax 1.0 --xlabel 'Time'
+```
+
+To see more options for this setup, try `python test.py --help`.
+
 ## Axes
 
-In `fishbowl`, axes refers to the layout of all of the features of the plot besides the data: the x- and y- axis, grid lines, line widths, ticks and labels. 
+In `fishbowl`, axes refers to the layout of all of the features of the plot besides the data: the x- and y- axis, grid lines, line widths, ticks and labels.
 
-The default axes style, `minimal` removes plot junk but leaves enough labels to be quite precise. You can modify this to suit your needs:
+The default axes style, `minimal` removes plot junk but leaves enough labels to be quite precise. You can modify this to suit your needs by editing the usual `matplotlibrc` options:
 
 ```python
 import fishbowl
@@ -55,7 +86,7 @@ fishbowl.set_style(axes='minimal_dashed')
 
 ## Fonts
 
-Matplotlib has powerful options for fonts through the combination of the `pgf` backend and `xelatex`. If you have a working xelatex installation, you can use arbitrary system fonts for your graphics. `fishbowl` makes this easy, just pass the name of a system font to `set_style`. The name should match the name used by `fc-list`, check for the currently installed options like this:
+Matplotlib has powerful options for fonts through the combination of the `pgf` backend and `xelatex`. If you have a working xelatex installation, you can use arbitrary system fonts for your graphics. `fishbowl` makes this easy, set your backend to `'pgf'` in your `matplotlibrc` and then just pass the name of a system font to `set_style`. The name should match the name used by `fc-list`, check for the currently installed options like this:
 
 ```bash
 fc-list :outline -f "%{family}\n" | sort | uniq
@@ -72,7 +103,7 @@ You can use `fishbowl.font` to check how these fonts are configured, and then mo
 ```python
 import fishbowl
 config = fishbowl.font.font('Lato Light')
-config['font.size'] = 30 
+config['font.size'] = 30
 
 fishbowl.font.save_font('Lato30')
 ```

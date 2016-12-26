@@ -2,6 +2,7 @@
 --requirement requirements.txt
 
 Paver
+click
 colorama
 flake8
 grip

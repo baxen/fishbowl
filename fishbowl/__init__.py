@@ -22,3 +22,4 @@ core -- Style setup and control tools
 
 from fishbowl.core import (style, set_style,  # noqa: F401
                            get_style, reset_style)
+from fishbowl.decorator import plot  # noqa: F401
