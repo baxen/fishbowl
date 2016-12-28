@@ -19,6 +19,17 @@ from cycler import cycler
 from fishbowl.base import loads_from_json, saves_to_json
 
 
+def next_color():
+    """ Next color from the mpl color cycle
+
+    Note that this cycle is independent of the one used within mpl
+    """
+    if not hasattr(next_color, '_cycle'):
+        next_color._cycle = matplotlib.rcParams['axes.prop_cycle']
+        next_color._cycle = itertools.cycle(next_color._cycle)
+    return next(next_color._cycle)['color']
+
+
 def cmap(arg):
     """ Configuration for cmap specified by arg
 
