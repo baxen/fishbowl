@@ -50,6 +50,10 @@ def setup_axes(ax, **kwargs):
         Set minimum of y-axis.
     ymax : float
         Set maximum of y-axis.
+    logx : bool
+        Use log scale for x-axis
+    logy : bool
+        Use log scale for y-axis
     xlabel : str
         Label for x-axis.
     ylabel : str
@@ -125,7 +129,14 @@ def setup_axes(ax, **kwargs):
             ax.set_xticklabels(kwargs['xticklabels'],
                                rotation=kwargs['xtickrot'])
         else:
-            ax.set_xticklabels(kwargs['xticklabels'])
+            # Best guess if 90 rotation required
+            labels = kwargs['xticklabels']
+            maxw = max([len(label) for label in labels])
+            if maxw * len(labels) > 45:
+                rotation = 90
+            else:
+                rotation = 0
+            ax.set_yticklabels(labels, rotation=rotation)
 
     if kwargs.get('logx'):
         ax.set_xscale('log')
@@ -204,7 +215,7 @@ def text(ax, text=None, text_location="upper left", **kwargs):
 
 @_plot_helper
 def legend(ax, legend=None, legend_text=None, **kwargs):
-    """ Place legend on an axis at legend_loc
+    """ Place legend on an axis
 
     Additional kwargs are ignored to facilitate argument passing.
 
@@ -225,13 +236,13 @@ def legend(ax, legend=None, legend_text=None, **kwargs):
         bbox['bbox_to_anchor'] = tuple(float(x)
                                        for x in legend[1:-1].split(','))
         bbox['bbox_transform'] = ax.transAxes
-        legend_loc = 2
+        legend = 2
 
     handles, labels = ax.get_legend_handles_labels()
     legend = ax.legend(handles,
                        labels,
                        frameon=False,
-                       loc=legend_loc if legend_loc else 'best',
+                       loc=legend,
                        prop={'size': 18},
                        labelspacing=0.25,
                        ncol=1 if len(labels) < 6 else 2,
