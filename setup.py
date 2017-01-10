@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name='fishbowl',
-      version='0.2.0',
+      version='0.2.1',
       description='Customizable matplotlib style extension',
       author='Bradley Axen',
       author_email='bradley.axen@gmail.com',

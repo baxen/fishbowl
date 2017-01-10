@@ -1,2 +1,3 @@
-cycler>=0.10.0
-matplotlib>=1.5.1
+cycler
+matplotlib
+numpy

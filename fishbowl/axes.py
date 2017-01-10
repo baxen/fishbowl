@@ -43,7 +43,7 @@ def _despined(init):
         for spine in ["left", "right", "top"]:
             self.spines[spine].set_visible(False)
         self.xaxis.tick_bottom()
-        self.yaxis.tick_right()
+        self.yaxis.tick_left()
         for tick in self.xaxis.get_major_ticks():
             tick.gridline.set_visible(False)
     return despined_init
