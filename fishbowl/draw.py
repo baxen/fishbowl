@@ -72,3 +72,30 @@ def bar(labels, heights, ax, **kwargs):
     ax.set_axisbelow(False)
     ax.tick_params(axis='both', which='both', length=0)
     return bars
+
+
+@handle_args
+def barh(labels, widths, ax, **kwargs):
+    """ Draw bars with widths and corresponding labels
+
+    Passes kwargs to ax.barh
+    """
+    height = kwargs.pop('height', 0.36)
+    if 'color' in kwargs:
+        color = kwargs.pop('color')
+    else:
+        color = next_color()  # make sure not to advance iterator if not used
+
+    dummy = np.arange(0, len(labels))
+    bars = ax.barh(dummy,
+                   widths,
+                   height=height,
+                   color=color,
+                   linewidth=0,
+                   **kwargs)
+    setup_axes(ax, yticks=dummy + height/2.0, yticklabels=labels)
+    ax.xaxis.set_major_locator(ticker.MaxNLocator(4))
+    ax.grid(axis='x', color='white', ls='-', lw=1.2)
+    ax.set_axisbelow(False)
+    ax.tick_params(axis='both', which='both', length=0)
+    return bars

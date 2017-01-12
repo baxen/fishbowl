@@ -136,7 +136,7 @@ def setup_axes(ax, **kwargs):
                 rotation = 90
             else:
                 rotation = 0
-            ax.set_yticklabels(labels, rotation=rotation)
+            ax.set_xticklabels(labels, rotation=rotation)
 
     if kwargs.get('logx'):
         ax.set_xscale('log')
