@@ -19,6 +19,7 @@ Modules:
 core -- Style setup and control tools
 
 """
+__version__ = '0.2.2'
 
 from fishbowl.core import (style, set_style,  # noqa: F401
                            get_style, reset_style)
