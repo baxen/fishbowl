@@ -54,12 +54,13 @@ def bar(labels, heights, ax, **kwargs):
     Passes kwargs to ax.bar
     """
     width = kwargs.pop('width', 0.36)
+    offset = kwargs.pop('offset', 0.0)
     if 'color' in kwargs:
         color = kwargs.pop('color')
     else:
         color = next_color()  # make sure not to advance iterator if not used
 
-    dummy = np.arange(0, len(labels))
+    dummy = np.arange(0, len(labels)) + offset
     bars = ax.bar(dummy,
                   heights,
                   width=width,
@@ -81,12 +82,13 @@ def barh(labels, widths, ax, **kwargs):
     Passes kwargs to ax.barh
     """
     height = kwargs.pop('height', 0.36)
+    offset = kwargs.pop('offset', 0.0)
     if 'color' in kwargs:
         color = kwargs.pop('color')
     else:
         color = next_color()  # make sure not to advance iterator if not used
 
-    dummy = np.arange(0, len(labels))
+    dummy = np.arange(0, len(labels)) + offset
     bars = ax.barh(dummy,
                    widths,
                    height=height,

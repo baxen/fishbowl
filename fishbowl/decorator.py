@@ -152,9 +152,9 @@ def setup_axes(ax, **kwargs):
         spine.set_zorder(100)
 
     if kwargs.get('xpercent'):
-        ax.xaxis.set_major_formatter(ticker.FuncFormatter('{0:.0%}'.format))
+        ax.xaxis.set_major_formatter(ticker.FuncFormatter('{0:.1%}'.format))
     if kwargs.get('ypercent'):
-        ax.yaxis.set_major_formatter(ticker.FuncFormatter('{0:.0%}'.format))
+        ax.yaxis.set_major_formatter(ticker.FuncFormatter('{0:.1%}'.format))
     if kwargs.get('xdollar'):
         ax.xaxis.set_major_formatter(ticker.FuncFormatter(r'\${:.0f}'.format))
     if kwargs.get('ydollar'):
