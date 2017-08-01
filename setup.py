@@ -8,7 +8,7 @@ requirements = [
 
 setup(
     name='fishbowl',
-    version='0.3.0',
+    version='0.3.1',
     description='Customizable matplotlib style extension',
     author='Bradley Axen',
     author_email='bradley.axen@gmail.com',
