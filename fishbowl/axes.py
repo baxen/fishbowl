@@ -1,7 +1,6 @@
 """
 axes - Configuration of matplotlib axes
 """
-from functools import wraps
 from fishbowl.base import loads_from_json, saves_to_json
 
 
@@ -29,22 +28,3 @@ def save_axes(name, config):
     if isinstance(config, dict):
         return config
     return axes(config)
-
-
-def _despined(init):
-    """ Decorator to remove spines
-
-    Makes the constructor of pyplot.Axes
-    return an axes without left right or top spines.
-    """
-    @wraps(init)
-    def despined_init(self, *args, **kwargs):
-        init(self, *args, **kwargs)
-        for spine in ["left", "right", "top"]:
-            self.spines[spine].set_visible(False)
-        self.xaxis.tick_bottom()
-        self.yaxis.tick_left()
-    return despined_init
-
-
-_initialize_decorators = {'despined': _despined}

@@ -20,7 +20,8 @@ Style options and customization for matplotlib
 
 ## Overview
 
-Matplotlib is very versatile but the default settings produce mediocre graphics. `fishbowl` provides an easy-to-use set of functions to configure matplotlib with an uncluttered style and nice fonts.
+Matplotlib is very versatile and can be customized to make excellent graphics.
+`fishbowl` provides an easy-to-use set of functions to configure matplotlib with an uncluttered style and nice fonts.
 
 <p align="center">
 <img src="/docs/example_goldfish_minimal_inconsolata.png" height="320">
@@ -31,7 +32,6 @@ Matplotlib is very versatile but the default settings produce mediocre graphics.
 - A decorator to enable easy plot customization from the command line
 - Minimal axes and lines to help figures flow with text
 - A few custom color schemes and support for `palettable`
-- Optional font configurations using xelatex
 - Support for saving and loading customized styles within the module
 
 ## CLI
@@ -157,4 +157,3 @@ import fishbowl
 
 fishbowl.set_style(palette='tetra')
 ```
-

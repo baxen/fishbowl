@@ -20,7 +20,6 @@ from cycler import cycler
 
 
 _defaultparams = matplotlib.rcParams.copy()
-_defaultinit = matplotlib.axes.Axes.__init__
 
 
 # ------------------------------------------------------------
@@ -32,17 +31,6 @@ def _set_style(options):
 
     """
     _set_style.current_options = options
-
-    # This is a monkey patch to handle some axes styles that
-    # cannot be configured in the rc parameters
-    # It should be safe in the majority of cases because
-    # the decorators only register additional function calls
-    # and do not replace the original function
-    initialize = options.pop('axes.initialize', None)
-    if initialize in ax._initialize_decorators:
-        matplotlib.axes.Axes.__init__ = ax._initialize_decorators[initialize](_defaultinit)
-    else:
-        matplotlib.axes.Axes.__init__ = _defaultinit
 
     palette = options.pop('color.palette', None)
     if palette:
